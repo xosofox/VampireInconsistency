@@ -19,29 +19,24 @@
 	<body>
 	  <a href="http://github.com/Xosofox/VampireInconsistency"><img style="position: absolute; top: 0; right: 0; border: 0;" src="http://s3.amazonaws.com/github/ribbons/forkme_right_darkblue_121621.png" alt="Fork me on GitHub" /></a>
 		<h1>A Viewer's Guide to Vampire Inconsistencies between movies and TV series</h1>
+
 		<p>OK, here's the thing: <span class="highlight">We all know vampires.</span> Maybe not personally, but in general. Because they have been and still are very popular and even gained some popularity recently with all those movies and TV shows.</p>
 		<p>However, there is some inconsistency with the different realities of vampires and it's very easy to get confused if the &quot;Twilight&quot; vampire likes <span class="highlight">garlic</span> or not, <span class="highlight">how to poperly kill</span> a &quot;Vampire Diaries&quot; vampire, how the &quot;Underworld&quot; vampire <span class="highlight">likes silver</span> and what <span class="highlight">type of sex</span> the &quot;True Blood&quot; vampire is best at.</p>
+
 		<p>This page is meant to refresh your mind if you get confused with Season 7 of Vampire Diaries, Season 12 of True Blood, any form of dim lit movie title or some other form of vampire story, old, new or yet to be told.</p>
 		<div id="vampireTable"></div>
 
 		<script type="text/javascript">
-			var shows={
-				'trueblood': {
-					title: 'True Blood',
-					imdb: ''
-				},
-				'diaries': {
-					title: 'Vampire Diaries',
-					imdb: ''
-				}
-			};
-
+			var shows={};
 			var topics={
 				'kill': {
 					'title': 'Recommended killing methods'
 				},
+				'dying': {
+					'title': 'What happens with the vampire'
+				},
 				'mirrors': {
-					'title': 'Visible in Mirrors?'
+					'title': 'Visible in mirrors?'
 				},
 				'garlic': {
 					'title': 'Garlic! Problem??'
@@ -51,30 +46,65 @@
 				},
 				'sunlightFeature': {
 					'title': 'Anything to allow a sun bath?'
+				},
+				'sleep': {
+					'title': 'Where do you sleep?'
 				}
 			};
 
-var data={
-	'trueblood': {
+function Show()
+{
+	this.title="unset";
+	this.imdb="unset";
+	//set an empty default value for each existing topic
+	this.data={};
+	for (topic in topics) {
+		this.data[topic]='?';
+	}
+
+	var me=this;
+	this.setTitle=function(title){ me.title=title; return me;};
+	this.setImdb=function(imdb){ me.imdb=imdb; return me;};
+
+	this.setData=function(data) {
+		for (k in data) {
+			this.data[k]=data[k];
+		}
+		return me;
+	};
+}
+
+shows["trueblood"]=new Show().setTitle("True Blood").setData({
 		'kill': 'Wooden Stake, Silver',
 		'mirrors': true,
 		'garlic': false,
 		'sunlight': 'Starts to smoke, burns, then dies',
 		'sunlightFeature': 'Drink fairy blood, allows daywalking for some time'
-	},
-	'diaries': {
+	});
+
+shows["diaries"]=new Show().setTitle("Vampire Diaries").setData({
 		'kill': 'Wooden Stake, Werewolf bite',
 		'mirrors': true,
-		'garlic': true,
+		'garlic': false,
 		'sunlight': 'Starts to smoke, burns, then dies',
 		'sunlightFeature': 'Hey, I got this ring a witch gave me...'
-	}
-};
+	});
+
+shows["twilight"]=new Show().setTitle("Twilight");
+shows["duskdown"]=new Show().setTitle("From dusk till dawn");
+shows["helsing"]=new Show().setTitle("Van Helsing");
+shows["underworld"]=new Show().setTitle("Underworld");
+shows["stoker"]=new Show().setTitle("Bram Stoker's Dracula");
+shows["interview"]=new Show().setTitle("Interview with a Vampire");
+shows["blade"]=new Show().setTitle("Blade");
+shows["priest"]=new Show().setTitle("Priest");
+shows["buffy"]=new Show().setTitle("Buffy");
+shows["nightwatch"]=new Show().setTitle("Nightwatch");
+shows["brooklyn"]=new Show().setTitle("Vampires in Brooklyn");
 
 
-			
 
-			renderTable();
+	renderTable();
 function renderTable()
 {
 	var showKeys=[];
@@ -105,7 +135,8 @@ function renderTable()
 		var rowHTML=CellHeadTemplate(t.title);
 		for (var colI=0;colI<colCount;colI++) {
 			var sKey=showKeys[colI];
-			value=data[sKey][tKey];
+			var show=shows[sKey];
+			value=show.data[tKey];
 			if (isBoolean(value)) {
 				rowHTML+=CellTemplate(BooleanTemplate(value));
 			} else {
@@ -153,9 +184,9 @@ function BooleanTemplate(tf)
 
 function isBoolean(tf)
 {
-	console.log(tf);
 	return ((tf==true) || (tf==false));
 }
 		</script>
 	</body>
 </html>
+
